@@ -25,11 +25,12 @@ class Participante {
     // Avanzar el participante en la competencia
     avanzar(velocidadMax) {
         if (this.posicion < 50 && !this.descalificado) {
-            const distancia = this.ran(0.61, 0.8) * velocidadMax; // Avance aleatorio basado en la velocidad
+            // Avance aleatorio basado en la velocidad máxima de la disciplina
+            const distancia = this.ran(0.6, velocidadMax); // Generar valor aleatorio entre 0 y la velocidad máxima
             if (distancia < 1) {
-                this.descalificado = true;
+                this.descalificado = true; // Si la distancia es menor a 1, el participante es descalificado
             } else {
-                this.posicion += distancia / 4; // Incrementar posición
+                this.posicion += distancia / 4; // Incrementar posición en base a la distancia
 
                 // Dependiendo de la distancia, se avanza a la siguiente disciplina
                 if (this.posicion < 10) {
@@ -40,6 +41,7 @@ class Participante {
                     this.avanzarDisciplina("Ciclismo", 1, velocidadMax); // Tiempo de ciclismo
                 }
 
+                // Si el participante llega a la meta (posicion >= 50), se marca como finalizado
                 if (this.posicion >= 50) {
                     this.posicion = 50;
                     this.disciplina = "Finalizado";
@@ -182,6 +184,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
+            participantes.sort((a, b) => b.posicion - a.posicion);
             // Actualizar la tabla con los resultados
             mostrarResultados();
 
@@ -196,18 +199,21 @@ document.addEventListener('DOMContentLoaded', function () {
     // Mostrar los resultados en la tabla
     function mostrarResultados() {
         const resultadosBody = document.getElementById("tabla-competidores").getElementsByTagName("tbody")[0];
-
+    
         // Limpiar la tabla antes de agregar nuevos resultados
         resultadosBody.innerHTML = "";
-
-        participantes.forEach(participante => {
+    
+        // Iterar sobre los participantes ordenados por su posición
+        participantes.forEach((participante, index) => {
             const tr = document.createElement("tr");
+    
             tr.innerHTML = `
+                <td>${index + 1}</td> <!-- Mostrar el puesto -->
                 <td>${participante.cedula}</td>
                 <td>${participante.nombre}</td>
                 <td>${participante.edad}</td>
                 <td>${participante.municipio}</td>
-                <td>${participante.posicion.toFixed(2)}</td>
+                <td>${participante.posicion.toFixed(2)}</td> <!-- Mostrar posición actual -->
                 <td>${participante.disciplina}</td>
                 <td>${participante.formatearTiempo()}</td> <!-- Tiempo total -->
                 <td>${participante.formatearTiempoCaminata()}</td> <!-- Tiempo Caminata -->
@@ -216,6 +222,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 <td>${participante.descalificado ? "Descalificado" : "En Competencia"}</td>
                 <td>${participante.horaLlegada ? participante.horaLlegada : "00:00:00"}</td>
             `;
+    
+            // Agregar la fila a la tabla
             resultadosBody.appendChild(tr);
         });
     }
