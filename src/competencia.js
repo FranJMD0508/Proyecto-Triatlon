@@ -30,18 +30,16 @@ class Participante {
                 this.descalificado = true;
             } else {
                 this.posicion += distancia / 4; // Incrementar posición
-                this.actualizarTiempo(0); // Actualizar tiempo total
+
                 // Dependiendo de la distancia, se avanza a la siguiente disciplina
                 if (this.posicion < 10) {
-                    this.tiempoCaminata += 1; // Incrementar tiempo de Caminata
-                    this.disciplina = "Caminata";
+                    this.avanzarDisciplina("Caminata", 1, velocidadMax); // Tiempo de caminata
                 } else if (this.posicion < 20) {
-                    this.tiempoNatacion += 1; // Incrementar tiempo de Natación
-                    this.disciplina = "Natación";
+                    this.avanzarDisciplina("Natación", 1, velocidadMax); // Tiempo de natación
                 } else if (this.posicion < 50) {
-                    this.tiempoCiclismo += 1; // Incrementar tiempo de Ciclismo
-                    this.disciplina = "Ciclismo";
+                    this.avanzarDisciplina("Ciclismo", 1, velocidadMax); // Tiempo de ciclismo
                 }
+
                 if (this.posicion >= 50) {
                     this.posicion = 50;
                     this.disciplina = "Finalizado";
@@ -51,9 +49,21 @@ class Participante {
         }
     }
 
-    // Actualizar el tiempo total
-    actualizarTiempo(incremento) {
-        this.tiempo += incremento;
+    // Avanzar por una disciplina y actualizar los tiempos correspondientes
+    avanzarDisciplina(disciplina, tiempoAvance, velocidadMax) {
+        this.disciplina = disciplina;
+
+        // Actualizar tiempo de la disciplina
+        if (disciplina === "Caminata") {
+            this.tiempoCaminata += tiempoAvance;
+            this.tiempo += tiempoAvance; // Sumar al tiempo total
+        } else if (disciplina === "Natación") {
+            this.tiempoNatacion += tiempoAvance;
+            this.tiempo += tiempoAvance; // Sumar al tiempo total
+        } else if (disciplina === "Ciclismo") {
+            this.tiempoCiclismo += tiempoAvance;
+            this.tiempo += tiempoAvance; // Sumar al tiempo total
+        }
     }
 
     // Formatear tiempo en formato HH:MM:SS
@@ -154,20 +164,15 @@ document.addEventListener('DOMContentLoaded', function () {
             const incrementoTiempo = Math.random() * (500 - 10) + 10;
 
             participantes.forEach(participante => {
-                participante.actualizarTiempo(incrementoTiempo); // Incrementar tiempo de todos los participantes
-
                 if (participante.compite && !participante.descalificado) {
                     if (participante.posicion < 10) {
                         participante.avanzar(velocidadCaminata);
-                        participante.disciplina = "Caminata";
                         todosFinalizados = false;
                     } else if (participante.posicion < 20) {
                         participante.avanzar(velocidadNatacion);
-                        participante.disciplina = "Natación";
                         todosFinalizados = false;
                     } else if (participante.posicion < 50) {
                         participante.avanzar(velocidadCiclismo);
-                        participante.disciplina = "Ciclismo";
                         todosFinalizados = false;
                     } else if (participante.posicion >= 50 && participante.disciplina !== "Finalizado") {
                         participante.posicion = 50;
