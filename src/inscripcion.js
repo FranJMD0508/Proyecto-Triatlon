@@ -26,4 +26,5 @@ document.getElementById("inscripcionForm").addEventListener("submit", function(e
     sessionStorage.setItem("participantes", JSON.stringify(participantes));
     //Limpia el campo de texto
     document.getElementById("inscripcionForm").reset();
+    alert("Participante inscrito con éxito")
 });

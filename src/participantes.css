@@ -1,0 +1,132 @@
+
+body{
+    height: 100%;
+}
+
+main{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.contenido{
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+}
+
+section{
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+    padding: 10px;
+    width: 50%;
+    background-color: #810b00;
+    overflow: auto;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgb(0, 0, 0, 0.4);
+}
+
+section h1{
+    color: white;
+}
+/* Contenedor de la lista de participantes */
+#lista-participantes {
+    overflow: auto; /* Habilita el scroll si la lista es demasiado larga */
+    margin-top: 10px;
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    background:linear-gradient(to bottom, rgba(0, 0, 0, 0.344), rgba(1, 1, 1, 0.76)), url(img/ciclismo.png);
+    background-position: center;
+    border-radius: 8px;
+}
+
+#lista-participantes div{
+    color: white;
+    background: transparent;
+    border: 2px solid white;
+    backdrop-filter: blur(10px);
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow-x: auto;
+}
+
+#lista-participantes button{
+    margin-top: 10px;
+    width: 50%;
+    border: 2px solid white;
+    background: rgba(255, 36, 36, 0.486);
+    left: 50%;
+    transform: translate(50%);
+    transition: all 0.3s ease;
+}
+
+#lista-participantes button:hover{
+    background: rgba(255, 36, 36, 0.8);
+}
+
+#lista-participantes button.asistente {
+    background-color: #4caf4fc4; /* Verde */
+}
+
+#lista-participantes button.asistente:hover {
+    background-color: #5acc5d; /* Verde */
+}
+
+#confirmarCambios, #iniciarSimulacion {
+    margin: 10px 0 5px 0;
+    height: 40px;
+    background-color: rgb(139, 139, 139);
+    border: 2px solid white;
+    color: rgb(255, 255, 255);
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+#confirmarCambios:hover, #iniciarSimulacion:hover{
+    background-color: rgb(96, 188, 96);
+    color: white;
+}
+
+.listaevento{
+    overflow-y: auto; /* Habilita el scroll si la lista es demasiado larga */
+    margin-top: 10px;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background:linear-gradient(to bottom, rgba(0, 0, 0, 0.374), rgba(1, 1, 1, 0.542)), url(img/caminata.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 8px;
+    color: white;
+    font-size: x-large;
+}
+
+.tabla-container {
+    margin: 20px 0;
+    overflow-x: auto;
+}
+table {
+    width: 100%;
+    opacity: 0.9;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: black;
+}
+table th, table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-family: Arial, sans-serif;
+}
+table th {
+    background-color: #4CAF50;
+    color: white;
+}
+table td {
+    background-color: #f9f9f9;
+}

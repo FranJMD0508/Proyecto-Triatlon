@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Si no hay participantes, mostrar un mensaje
         if (participantes.length === 0) {
-            listaParticipantesDiv.innerHTML = "<p>No hay participantes inscritos.</p>";
+            listaParticipantesDiv.innerHTML = "<h1>No hay participantes inscritos.</h1>";
             return;
         }
 
@@ -21,20 +21,24 @@ document.addEventListener('DOMContentLoaded', function () {
             const participanteDiv = document.createElement("div");
             participanteDiv.classList.add("participante");
             participanteDiv.innerHTML = `
-                <h3>${participante.nombre}</h3>
+                <h2>${participante.nombre}</h2>
                 <p>Cédula: ${participante.cedula}</p>
                 <p>Edad: ${participante.edad}</p>
                 <p>Municipio: ${participante.municipio}</p>
-                <p class="estado">Estado: ${participante.compite ? 'Competidor' : 'No Competidor'}</p>
                 <button class="btn-competir" data-cedula="${participante.cedula}">
-                    ${participante.compite ? 'Desmarcar como Competidor' : 'Marcar como Competidor'}
+                    ${participante.compite ? 'Asistente' : 'Inasistente'}
                 </button>
             `;
             listaParticipantesDiv.appendChild(participanteDiv);
 
             // Agregar el evento para cambiar el estado de 'compite' al hacer clic en el botón
             const btnCompetir = participanteDiv.querySelector(".btn-competir");
-
+            btnCompetir.textContent = participante.compite ? 'Asistente' : 'Inasistente';
+            if (participante.compite) {
+                btnCompetir.classList.add('asistente');
+            } else {
+                btnCompetir.classList.remove('asistente');
+            }
             btnCompetir.addEventListener("click", function () {
                 // Cambiar el estado de 'compite' basado en el valor actual
                 participante.compite = !participante.compite;  // Cambia el valor a lo contrario de lo que es
@@ -44,8 +48,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 sessionStorage.setItem("participantes", JSON.stringify(participantes));
 
                 // Cambiar el texto del botón en tiempo real
-                btnCompetir.textContent = participante.compite ? 'Desmarcar como Competidor' : 'Marcar como Competidor';
-
+                btnCompetir.textContent = participante.compite ? 'Asistente' : 'Inasistente';
+                if (participante.compite) {
+                    btnCompetir.classList.add('asistente');
+                } else {
+                    btnCompetir.classList.remove('asistente');
+                }
                 // Cambiar el estado en el texto de la lista de participantes
                 const estadoElemento = participanteDiv.querySelector('.estado'); // Ahora apuntamos al 'p' con clase 'estado'
                 estadoElemento.textContent = `Estado: ${participante.compite ? 'Competidor' : 'No Competidor'}`;
