@@ -25,28 +25,35 @@ document.addEventListener('DOMContentLoaded', function () {
                 <p>Cédula: ${participante.cedula}</p>
                 <p>Edad: ${participante.edad}</p>
                 <p>Municipio: ${participante.municipio}</p>
-                <p>Estado: <span id="estado-${index}">${participante.compite ? 'Competidor' : 'No Competidor'}</span></p>
-                <button class="btn-competir" data-index="${index}">
+                <p class="estado">Estado: ${participante.compite ? 'Competidor' : 'No Competidor'}</p>
+                <button class="btn-competir" data-cedula="${participante.cedula}">
                     ${participante.compite ? 'Desmarcar como Competidor' : 'Marcar como Competidor'}
                 </button>
             `;
             listaParticipantesDiv.appendChild(participanteDiv);
 
-            // Agregar el evento de "Marcar/Desmarcar como Competidor"
+            // Agregar el evento para cambiar el estado de 'compite' al hacer clic en el botón
             const btnCompetir = participanteDiv.querySelector(".btn-competir");
+
             btnCompetir.addEventListener("click", function () {
-                // Cambiar el estado de 'compite' según el estado actual
-                participantes[index].compite = !participantes[index].compite;
+                // Cambiar el estado de 'compite' basado en el valor actual
+                participante.compite = !participante.compite;  // Cambia el valor a lo contrario de lo que es
 
                 // Actualizar el array de participantes en sessionStorage
+                participantes[index] = participante;
                 sessionStorage.setItem("participantes", JSON.stringify(participantes));
 
                 // Cambiar el texto del botón en tiempo real
-                btnCompetir.textContent = participantes[index].compite ? 'Desmarcar como Competidor' : 'Marcar como Competidor';
+                btnCompetir.textContent = participante.compite ? 'Desmarcar como Competidor' : 'Marcar como Competidor';
 
-                // Actualizar solo el estado del participante en la interfaz en tiempo real
-                document.getElementById(`estado-${index}`).textContent = participantes[index].compite ? 'Competidor' : 'No Competidor';
+                // Cambiar el estado en el texto de la lista de participantes
+                const estadoElemento = participanteDiv.querySelector('.estado'); // Ahora apuntamos al 'p' con clase 'estado'
+                estadoElemento.textContent = `Estado: ${participante.compite ? 'Competidor' : 'No Competidor'}`;
             });
+        });
+        document.getElementById('confirmarCambios').addEventListener("click", function() {
+            // Este código recarga la página para reflejar los cambios
+            location.reload();
         });
     }
 
