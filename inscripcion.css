@@ -139,6 +139,8 @@ section{
     z-index: 1;
     width: 220px;
     top: 290px;
+    left: 50%;
+    transform: translate(-50%);
     height: 50px;
     background-color: rgba(121, 119, 119, 0.607);
     border: 2px solid rgba(255, 255, 255, 0.645);
