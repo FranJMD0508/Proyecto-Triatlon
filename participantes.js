@@ -1,47 +1,55 @@
-// Recuperar los participantes desde sessionStorage
-const participantes = JSON.parse(sessionStorage.getItem("participantes")) || [];
+document.addEventListener('DOMContentLoaded', function () {
+    // Obtener el contenedor donde se mostrarán los participantes
+    const listaParticipantesDiv = document.getElementById("lista-participantes");
 
-// Obtener el contenedor para la lista de participantes
-const listaParticipantes = document.getElementById("lista-participantes");
+    // Función para crear y mostrar los participantes
+    function mostrarParticipantes() {
+        // Obtener los participantes desde sessionStorage
+        let participantes = JSON.parse(sessionStorage.getItem("participantes")) || [];
 
-// Función para cambiar el estado de si un participante va a competir o no
-function actualizarCompetencia(index) {
-    // Cambiar el estado de "compite" (true/false)
-    participantes[index].compite = !participantes[index].compite;
+        // Si no hay participantes, mostrar un mensaje
+        if (participantes.length === 0) {
+            listaParticipantesDiv.innerHTML = "<p>No hay participantes inscritos.</p>";
+            return;
+        }
 
-    // Guardar el arreglo actualizado en sessionStorage
-    sessionStorage.setItem("participantes", JSON.stringify(participantes));
+        // Limpiar la lista antes de agregar nuevos elementos
+        listaParticipantesDiv.innerHTML = "";
 
-    // Volver a cargar la lista de participantes después de la actualización
-    cargarParticipantes();
-}
-
-// Función para cargar la lista de participantes
-function cargarParticipantes() {
-    if (participantes.length > 0) {
-        let listaHTML = "<ul>";
+        // Crear una lista con los participantes
         participantes.forEach((participante, index) => {
-            // Mostrar el estado actual del participante (si va a competir o no)
-            const textoBoton = participante.compite ? "Marcar como No Competidor" : "Marcar como Competidor";
-
-            listaHTML += `
-                <li>
-                    <strong>Nombre:</strong> ${participante.nombre} <br>
-                    <strong>Cédula:</strong> ${participante.cedula} <br>
-                    <strong>Edad:</strong> ${participante.edad} <br>
-                    <strong>Municipio:</strong> ${participante.municipio} <br><br>
-                    <button onclick="actualizarCompetencia(${index})">
-                        ${textoBoton}
-                    </button>
-                </li>
+            const participanteDiv = document.createElement("div");
+            participanteDiv.classList.add("participante");
+            participanteDiv.innerHTML = `
+                <h3>${participante.nombre}</h3>
+                <p>Cédula: ${participante.cedula}</p>
+                <p>Edad: ${participante.edad}</p>
+                <p>Municipio: ${participante.municipio}</p>
+                <p>Estado: <span id="estado-${index}">${participante.compite ? 'Competidor' : 'No Competidor'}</span></p>
+                <button class="btn-competir" data-index="${index}">
+                    ${participante.compite ? 'Desmarcar como Competidor' : 'Marcar como Competidor'}
+                </button>
             `;
-        });
-        listaHTML += "</ul>";
-        listaParticipantes.innerHTML = listaHTML;
-    } else {
-        listaParticipantes.innerHTML = "<p>No hay participantes registrados aún.</p>";
-    }
-}
+            listaParticipantesDiv.appendChild(participanteDiv);
 
-// Cargar los participantes cuando se carga la página
-cargarParticipantes();
+            // Agregar el evento de "Marcar/Desmarcar como Competidor"
+            const btnCompetir = participanteDiv.querySelector(".btn-competir");
+            btnCompetir.addEventListener("click", function () {
+                // Cambiar el estado de 'compite' según el estado actual
+                participantes[index].compite = !participantes[index].compite;
+
+                // Actualizar el array de participantes en sessionStorage
+                sessionStorage.setItem("participantes", JSON.stringify(participantes));
+
+                // Cambiar el texto del botón en tiempo real
+                btnCompetir.textContent = participantes[index].compite ? 'Desmarcar como Competidor' : 'Marcar como Competidor';
+
+                // Actualizar solo el estado del participante en la interfaz en tiempo real
+                document.getElementById(`estado-${index}`).textContent = participantes[index].compite ? 'Competidor' : 'No Competidor';
+            });
+        });
+    }
+
+    // Llamamos a la función para mostrar los participantes
+    mostrarParticipantes();
+});

@@ -25,11 +25,35 @@
         <div class="contenido">
             <section>   
                 <h1>Participantes Inscritos</h1>
-                <div id="lista-participantes"></div>
+                <div id="lista-participantes"></div> <!-- Aquí se listarán los participantes -->
             </section>
             <section>   
                 <h1>Inicio del evento</h1>
-                <div class="listaevento">AQUI IRIA LA TABLA DE LA COMPETICION</div>
+                <div class="listaevento">
+                    <table id="tabla-competidores" class="tabla-competencia">
+                        <thead>
+                            <tr>
+                                <th>Cédula</th>
+                                <th>Nombre</th>
+                                <th>Edad</th>
+                                <th>Municipio</th>
+                                <th>Posición (km)</th>
+                                <th>Disciplina</th>
+                                <th>Tiempo Total</th>
+                                <th>Tiempo Caminata</th>
+                                <th>Tiempo Natación</th>
+                                <th>Tiempo Ciclismo</th>
+                                <th>Estado</th>
+                                <th>Hora de llegada</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Aquí se llenará la tabla dinámicamente con los resultados -->
+                        </tbody>
+                    </table>
+                    
+                </div>
+                <button id="iniciarSimulacion">Iniciar Simulación</button>
             </section>
         </div>
         <footer>
@@ -38,7 +62,9 @@
             <h5>Copyright ©2024</h5>
         </footer>
 
-        <script src="participantes.js"></script>
+        <!-- Aquí se incluye el archivo JS -->
+        <script src="participantes.js"></script> <!-- Este archivo maneja los participantes -->
+        <script src="competencia.js"></script>
     </main>
 </body>
 </html>
