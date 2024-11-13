@@ -1,0 +1,54 @@
+/* Contenedor de la lista de participantes */
+#lista-participantes {
+    max-height: 500px; /* Limita la altura máxima */
+    overflow-y: auto; /* Habilita el scroll si la lista es demasiado larga */
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+/* Estilo para la lista de participantes */
+#lista-participantes ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+#lista-participantes li {
+    margin: 10px 0; /* Márgenes entre participantes */
+    padding: 8px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px; /* Fuente más pequeña para ajustarse mejor */
+}
+
+#lista-participantes li button {
+    padding: 5px 10px;
+    font-size: 12px;
+    border: none;
+    background-color: #4CAF50; /* Color verde para el botón */
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#lista-participantes li button:hover {
+    background-color: #45a049;
+}
+
+/* Responsividad para pantallas pequeñas */
+@media (max-width: 600px) {
+    #lista-participantes {
+        max-height: 400px; /* Menor altura máxima en pantallas pequeñas */
+    }
+
+    #lista-participantes li {
+        font-size: 12px; /* Fuente aún más pequeña en pantallas pequeñas */
+    }
+
+    #lista-participantes li button {
+        font-size: 10px; /* Reducir tamaño del botón en pantallas pequeñas */
+    }
+}
