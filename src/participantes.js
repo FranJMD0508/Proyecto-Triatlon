@@ -63,6 +63,10 @@ document.addEventListener('DOMContentLoaded', function () {
             // Este código recarga la página para reflejar los cambios
             location.reload();
         });
+        document.getElementById('detenerSimulacion').addEventListener("click", function() {
+            // Este código recarga la página para reflejar los cambios
+            location.reload();
+        });
     }
 
     // Llamamos a la función para mostrar los participantes

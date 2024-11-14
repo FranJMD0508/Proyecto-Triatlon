@@ -107,7 +107,7 @@ class Participante {
         return `${this.nombre} - Cédula: ${this.cedula} - Edad: ${this.edad} - Municipio: ${this.municipio} - ` +
                `Posición: ${this.posicion.toFixed(2)} km - Disciplina: ${this.disciplina} - Tiempo Total: ${this.formatearTiempo()} - ` +
                `Caminata: ${this.formatearTiempoCaminata()} - Natación: ${this.formatearTiempoNatacion()} - ` +
-               `Ciclismo: ${this.formatearTiempoCiclismo()} - ${this.descalificado ? "Descalificado" : "En Competencia"} - Hora de llegada: ${this.horaLlegada || "N/A"}`;
+               `Ciclismo: ${this.formatearTiempoCiclismo()} - ${this.descalificado ? "Descalificado" : "Competidor"} - Hora de llegada: ${this.horaLlegada || "N/A"}`;
     }
 
     // Funciones para formatear los tiempos de cada disciplina
@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <td>${participante.formatearTiempoCaminata()}</td> <!-- Tiempo Caminata -->
                 <td>${participante.formatearTiempoNatacion()}</td> <!-- Tiempo Natación -->
                 <td>${participante.formatearTiempoCiclismo()}</td> <!-- Tiempo Ciclismo -->
-                <td>${participante.descalificado ? "Descalificado" : "En Competencia"}</td>
+                <td>${participante.descalificado ? "Descalificado" : "Competidor"}</td>
                 <td>${participante.horaLlegada ? participante.horaLlegada : "00:00:00"}</td>
             `;
 

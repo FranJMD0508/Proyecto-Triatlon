@@ -1,4 +1,17 @@
 // Evento para el formulario de inscripción
+    const inputCantidad = document.getElementById('edad');
+    console.log("pene")
+
+    // Deshabilitar la entrada directa del teclado
+    inputCantidad.addEventListener('keydown', function(event) {
+        event.preventDefault();
+    });
+
+    // Permitir sólo el uso de los botones de incremento y decremento
+    inputCantidad.addEventListener('mousedown', function(event) {
+        event.stopPropagation();
+    });
+
 document.getElementById("inscripcionForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Evitar que el formulario se envíe de forma convencional
     

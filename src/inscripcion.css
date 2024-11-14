@@ -61,6 +61,14 @@ nav img{
     margin: -5px 3px;
 }
 
+nav a{
+    transition: 200ms ease;
+}
+
+.nav-link:hover{
+    opacity: 0.85;
+}
+
 .contenido{
     margin: 0 80px 0 80px;
     display: flex;

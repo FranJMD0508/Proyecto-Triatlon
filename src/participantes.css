@@ -27,6 +27,14 @@ section{
     box-shadow: 0 5px 15px rgb(0, 0, 0, 0.4);
 }
 
+nav a{
+    transition: 200ms ease;
+}
+
+.nav-link:hover{
+    opacity: 0.85;
+}
+
 section h1{
     color: white;
 }
@@ -75,7 +83,11 @@ section h1{
     background-color: #5acc5d; /* Verde */
 }
 
-#confirmarCambios, #iniciarSimulacion {
+#botones{
+    display: flex;
+}
+
+#confirmarCambios {
     margin: 10px 0 5px 0;
     height: 40px;
     background-color: rgb(139, 139, 139);
@@ -85,8 +97,33 @@ section h1{
     transition: all 0.3s ease;
 }
 
+#iniciarSimulacion{
+    margin: 10px 0 5px 0;
+    height: 33px;
+    background-color: rgb(139, 139, 139);
+    border: 2px solid white;
+    color: rgb(255, 255, 255);
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+#detenerSimulacion{
+    margin: 10px 5px 0px 10px;
+    height: 33px;
+    background-color: rgb(139, 139, 139);
+    border: 2px solid white;
+    color: rgb(255, 255, 255);
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
 #confirmarCambios:hover, #iniciarSimulacion:hover{
     background-color: rgb(96, 188, 96);
+    color: white;
+}
+
+#detenerSimulacion:hover{
+    background-color: rgb(199, 46, 46);
     color: white;
 }
 
@@ -118,13 +155,13 @@ table {
     color: black;
 }
 table th, table td {
-    padding: 12px;
+    padding: 0 12px 0 12px;
     text-align: center;
     border: 1px solid #ddd;
     font-family: Arial, sans-serif;
 }
 table th {
-    background-color: #4CAF50;
+    background-color: #ab3d33;
     color: white;
 }
 table td {
