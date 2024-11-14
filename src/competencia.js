@@ -23,20 +23,16 @@ class Participante {
 
     // Avanzar el participante en la competencia
     avanzar(velocidadMax) {
-        // Definimos el tiempo que tomará en cada disciplina
-        const tiempoCaminata = this.ran(1, 10) + 1;
-        const tiempoNatacion = this.ran(1, 4) + 1;
-        const tiempoCiclismo = this.ran(1, 1.3) + 1;
+        const tiempoCaminata = this.ran(1, 5.2) + 600;
+        const tiempoNatacion = this.ran(1, 3.3) + 400;
+        const tiempoCiclismo = this.ran(0.5, 1.3)+ 600;
 
         if (this.posicion < 50 && !this.descalificado) {
-            // Avance aleatorio basado en la velocidad máxima de la disciplina
-            const distancia = this.ran(0, velocidadMax) + velocidadMax; // Generar valor aleatorio entre 0 y la velocidad máxima
+            const distancia = this.ran(0, velocidadMax) + (velocidadMax/10000)+0.95;
             if (distancia < 1) {
-                this.descalificado = true; // Si la distancia es menor a 1, el participante es descalificado
+                this.descalificado = true;
             } else {
-                this.posicion += distancia / 4; // Incrementar posición en base a la distancia
-
-                // Dependiendo de la distancia, se avanza a la siguiente disciplina
+                this.posicion += distancia / 4;
                 if (this.posicion < 10) {
                     this.avanzarDisciplina("Caminata", tiempoCaminata);
                 } else if (this.posicion < 20) {
@@ -45,7 +41,6 @@ class Participante {
                     this.avanzarDisciplina("Ciclismo", tiempoCiclismo);
                 }
 
-                // Si el participante llega a la meta (posicion >= 50), se marca como finalizado
                 if (this.posicion >= 50) {
                     this.posicion = 50;
                     this.disciplina = "Finalizado";
@@ -55,24 +50,20 @@ class Participante {
         }
     }
 
-    // Avanzar por una disciplina y actualizar los tiempos correspondientes
     avanzarDisciplina(disciplina, tiempoAvance) {
         this.disciplina = disciplina;
-
-        // Actualizar el tiempo acumulado de cada disciplina
         if (disciplina === "Caminata") {
             this.tiempoCaminata += tiempoAvance;
-            this.tiempoTotal = this.tiempoCaminata; // Al final de la caminata, este es el tiempo acumulado total
+            this.tiempoTotal = this.tiempoCaminata;
         } else if (disciplina === "Natación") {
             this.tiempoNatacion += tiempoAvance;
-            this.tiempoTotal = this.tiempoCaminata + this.tiempoNatacion; // Al finalizar natación, se agrega al total acumulado
+            this.tiempoTotal = this.tiempoCaminata + this.tiempoNatacion;
         } else if (disciplina === "Ciclismo") {
             this.tiempoCiclismo += tiempoAvance;
-            this.tiempoTotal = this.tiempoCaminata + this.tiempoNatacion + this.tiempoCiclismo; // Al finalizar ciclismo, se agrega al total acumulado
+            this.tiempoTotal = this.tiempoCaminata + this.tiempoNatacion + this.tiempoCiclismo;
         }
     }
 
-    // Formatear tiempo en formato HH:MM:SS
     formatearTiempo() {
         const horas = Math.floor(this.tiempoTotal / 3600);
         const minutos = Math.floor((this.tiempoTotal % 3600) / 60);
@@ -80,14 +71,12 @@ class Participante {
         return `${String(horas).padStart(2, '0')}:${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
     }
 
-    // Registrar la hora de llegada
     registrarLlegada() {
         if (!this.horaLlegada) {
             this.horaLlegada = this.formatearTiempo();
         }
     }
 
-    // Método toString actualizado para mostrar los tiempos por disciplina
     toString() {
         return `${this.nombre} - Cédula: ${this.cedula} - Edad: ${this.edad} - Municipio: ${this.municipio} - ` +
                `Posición: ${this.posicion.toFixed(2)} km - Disciplina: ${this.disciplina} - Tiempo Total: ${this.formatearTiempo()} - ` +
@@ -95,7 +84,6 @@ class Participante {
                `Ciclismo: ${this.formatearTiempoCiclismo()} - ${this.descalificado ? "Descalificado" : "En Competencia"} - Hora de llegada: ${this.horaLlegada || "N/A"}`;
     }
 
-    // Métodos para formatear los tiempos específicos por disciplina
     formatearTiempoCaminata() {
         const horas = Math.floor(this.tiempoCaminata / 3600);
         const minutos = Math.floor((this.tiempoCaminata % 3600) / 60);
@@ -117,20 +105,22 @@ class Participante {
         return `${String(horas).padStart(2, '0')}:${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
     }
 }
-// Al cargar el documento
+
+// Aquí empieza el código principal para controlar la simulación
+
 document.addEventListener('DOMContentLoaded', function () {
     const btnIniciarSimulacion = document.getElementById("iniciarSimulacion");
 
     // Verificar si el botón de iniciar simulación está disponible
     if (btnIniciarSimulacion) {
         btnIniciarSimulacion.addEventListener("click", function() {
-            // Verificar si hay al menos un competidor
-            if (hayParticipantesCompetidores()) {
+            // Verificar si hay al menos dos competidores
+            if (haySuficientesCompetidores()) {
                 alert("Simulación iniciada");
                 descalificarNoCompetidores(); // Marcar como descalificados a los que no compiten
                 iniciarSimulacion(); // Iniciar la simulación
             } else {
-                alert("¡Debe haber al menos un participante marcado como competidor!");
+                alert("¡Debe haber al menos dos participantes marcados como competidores!");
             }
         });
     }
@@ -141,9 +131,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     console.log("Participantes cargados:", participantes); // Verificamos si los participantes están cargados correctamente
 
-    // Función para verificar si hay al menos un participante competidor
-    function hayParticipantesCompetidores() {
-        return participantes.some(participante => participante.compite);
+    // Función para verificar si hay al menos dos participantes competidores
+    function haySuficientesCompetidores() {
+        return participantes.filter(participante => participante.compite).length >= 2;
     }
 
     // Función para descalificar a los participantes que no compiten
@@ -164,9 +154,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         let intervalo = setInterval(() => {
             let todosFinalizados = true;
-
-            // Generar incremento de tiempo aleatorio para todos los participantes
-            const incrementoTiempo = Math.random() * (500 - 10) + 10;
 
             participantes.forEach(participante => {
                 if (participante.compite && !participante.descalificado) {
@@ -210,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
         participantes.forEach((participante, index) => {
             const tr = document.createElement("tr");
     
-            tr.innerHTML = `
+            tr.innerHTML = ` 
                 <td>${index + 1}</td> <!-- Mostrar el puesto -->
                 <td>${participante.cedula}</td>
                 <td>${participante.nombre}</td>
