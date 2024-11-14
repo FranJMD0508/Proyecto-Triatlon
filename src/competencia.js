@@ -1,4 +1,3 @@
-// Definir la clase Participante
 class Participante {
     constructor(nombre, cedula, edad, municipio, compite = false) {
         this.nombre = nombre;
@@ -7,7 +6,7 @@ class Participante {
         this.municipio = municipio;
         this.posicion = 0;
         this.descalificado = false;
-        this.tiempo = 0; // Tiempo total
+        this.tiempoTotal = 0; // Tiempo total acumulado
         this.disciplina = "N/A";
         this.horaLlegada = null;
         this.compite = compite; // Si compite es true, este participante es un competidor activo
@@ -24,9 +23,14 @@ class Participante {
 
     // Avanzar el participante en la competencia
     avanzar(velocidadMax) {
+        // Definimos el tiempo que tomará en cada disciplina
+        const tiempoCaminata = this.ran(1, 10) + 1;
+        const tiempoNatacion = this.ran(1, 4) + 1;
+        const tiempoCiclismo = this.ran(1, 1.3) + 1;
+
         if (this.posicion < 50 && !this.descalificado) {
             // Avance aleatorio basado en la velocidad máxima de la disciplina
-            const distancia = this.ran(0.6, velocidadMax); // Generar valor aleatorio entre 0 y la velocidad máxima
+            const distancia = this.ran(0, velocidadMax) + velocidadMax; // Generar valor aleatorio entre 0 y la velocidad máxima
             if (distancia < 1) {
                 this.descalificado = true; // Si la distancia es menor a 1, el participante es descalificado
             } else {
@@ -34,11 +38,11 @@ class Participante {
 
                 // Dependiendo de la distancia, se avanza a la siguiente disciplina
                 if (this.posicion < 10) {
-                    this.avanzarDisciplina("Caminata", 1, velocidadMax); // Tiempo de caminata
+                    this.avanzarDisciplina("Caminata", tiempoCaminata);
                 } else if (this.posicion < 20) {
-                    this.avanzarDisciplina("Natación", 1, velocidadMax); // Tiempo de natación
+                    this.avanzarDisciplina("Natación", tiempoNatacion);
                 } else if (this.posicion < 50) {
-                    this.avanzarDisciplina("Ciclismo", 1, velocidadMax); // Tiempo de ciclismo
+                    this.avanzarDisciplina("Ciclismo", tiempoCiclismo);
                 }
 
                 // Si el participante llega a la meta (posicion >= 50), se marca como finalizado
@@ -52,27 +56,27 @@ class Participante {
     }
 
     // Avanzar por una disciplina y actualizar los tiempos correspondientes
-    avanzarDisciplina(disciplina, tiempoAvance, velocidadMax) {
+    avanzarDisciplina(disciplina, tiempoAvance) {
         this.disciplina = disciplina;
 
-        // Actualizar tiempo de la disciplina
+        // Actualizar el tiempo acumulado de cada disciplina
         if (disciplina === "Caminata") {
             this.tiempoCaminata += tiempoAvance;
-            this.tiempo += tiempoAvance; // Sumar al tiempo total
+            this.tiempoTotal = this.tiempoCaminata; // Al final de la caminata, este es el tiempo acumulado total
         } else if (disciplina === "Natación") {
             this.tiempoNatacion += tiempoAvance;
-            this.tiempo += tiempoAvance; // Sumar al tiempo total
+            this.tiempoTotal = this.tiempoCaminata + this.tiempoNatacion; // Al finalizar natación, se agrega al total acumulado
         } else if (disciplina === "Ciclismo") {
             this.tiempoCiclismo += tiempoAvance;
-            this.tiempo += tiempoAvance; // Sumar al tiempo total
+            this.tiempoTotal = this.tiempoCaminata + this.tiempoNatacion + this.tiempoCiclismo; // Al finalizar ciclismo, se agrega al total acumulado
         }
     }
 
     // Formatear tiempo en formato HH:MM:SS
     formatearTiempo() {
-        const horas = Math.floor(this.tiempo / 3600);
-        const minutos = Math.floor((this.tiempo % 3600) / 60);
-        const segundos = Math.floor(this.tiempo % 60);
+        const horas = Math.floor(this.tiempoTotal / 3600);
+        const minutos = Math.floor((this.tiempoTotal % 3600) / 60);
+        const segundos = Math.floor(this.tiempoTotal % 60);
         return `${String(horas).padStart(2, '0')}:${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
     }
 
@@ -113,7 +117,6 @@ class Participante {
         return `${String(horas).padStart(2, '0')}:${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
     }
 }
-
 // Al cargar el documento
 document.addEventListener('DOMContentLoaded', function () {
     const btnIniciarSimulacion = document.getElementById("iniciarSimulacion");
