@@ -10,10 +10,15 @@ class Participante {
         this.disciplina = "N/A";
         this.horaLlegada = null;
         this.compite = compite; // Si compite es true, este participante es un competidor activo
-        // Agregar tiempos por disciplina
+        // Tiempos de cada disciplina
         this.tiempoCaminata = 0;
         this.tiempoNatacion = 0;
         this.tiempoCiclismo = 0;
+
+        // Hora de inicio de cada disciplina
+        this.horaInicioCaminata = null;
+        this.horaInicioNatacion = null;
+        this.horaInicioCiclismo = null;
     }
 
     // Función para generar un número aleatorio entre un rango
@@ -23,16 +28,17 @@ class Participante {
 
     // Avanzar el participante en la competencia
     avanzar(velocidadMax) {
-        const tiempoCaminata = this.ran(1, 5.2) + 600;
-        const tiempoNatacion = this.ran(1, 3.3) + 400;
-        const tiempoCiclismo = this.ran(0.5, 1.3)+ 600;
+        const tiempoCaminata = this.ran(1, 5.2) + 600;  // Tiempo de caminata
+        const tiempoNatacion = this.ran(1, 3.3) + 400;  // Tiempo de natación
+        const tiempoCiclismo = this.ran(0.5, 1.3) + 600;  // Tiempo de ciclismo
 
         if (this.posicion < 50 && !this.descalificado) {
-            const distancia = this.ran(0, velocidadMax) + (velocidadMax/10000)+0.95;
+            const distancia = this.ran(0, velocidadMax) + (velocidadMax / 10000) + 0.95;
             if (distancia < 1) {
                 this.descalificado = true;
             } else {
                 this.posicion += distancia / 4;
+
                 if (this.posicion < 10) {
                     this.avanzarDisciplina("Caminata", tiempoCaminata);
                 } else if (this.posicion < 20) {
@@ -50,33 +56,53 @@ class Participante {
         }
     }
 
+    // Avanzar en una disciplina (y acumular el tiempo)
     avanzarDisciplina(disciplina, tiempoAvance) {
         this.disciplina = disciplina;
+
+        // Se registra la hora de inicio de la disciplina
+        if (disciplina === "Caminata" && this.horaInicioCaminata === null) {
+            this.horaInicioCaminata = this.obtenerHoraActual();
+        } else if (disciplina === "Natación" && this.horaInicioNatacion === null) {
+            this.horaInicioNatacion = this.obtenerHoraActual();
+        } else if (disciplina === "Ciclismo" && this.horaInicioCiclismo === null) {
+            this.horaInicioCiclismo = this.obtenerHoraActual();
+        }
+
+        // Acumulando el tiempo por disciplina
         if (disciplina === "Caminata") {
             this.tiempoCaminata += tiempoAvance;
-            this.tiempoTotal = this.tiempoCaminata;
+            this.tiempoTotal = this.tiempoCaminata;  // El tiempo total es solo el de la caminata
         } else if (disciplina === "Natación") {
             this.tiempoNatacion += tiempoAvance;
-            this.tiempoTotal = this.tiempoCaminata + this.tiempoNatacion;
+            this.tiempoTotal = this.tiempoCaminata + this.tiempoNatacion;  // Acumula caminata + natación
         } else if (disciplina === "Ciclismo") {
             this.tiempoCiclismo += tiempoAvance;
-            this.tiempoTotal = this.tiempoCaminata + this.tiempoNatacion + this.tiempoCiclismo;
+            this.tiempoTotal = this.tiempoCaminata + this.tiempoNatacion + this.tiempoCiclismo;  // Acumula caminata + natación + ciclismo
         }
     }
 
-    formatearTiempo() {
-        const horas = Math.floor(this.tiempoTotal / 3600);
-        const minutos = Math.floor((this.tiempoTotal % 3600) / 60);
-        const segundos = Math.floor(this.tiempoTotal % 60);
-        return `${String(horas).padStart(2, '0')}:${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
+    // Obtener la hora actual como una cadena "hh:mm:ss"
+    obtenerHoraActual() {
+        let hora = Math.floor(this.tiempoTotal / 3600);
+        let minutos = Math.floor((this.tiempoTotal % 3600) / 60);
+        let segundos = Math.floor(this.tiempoTotal % 60);
+        return `${String(hora).padStart(2, '0')}:${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
     }
 
+    // Registrar la hora de llegada
     registrarLlegada() {
         if (!this.horaLlegada) {
-            this.horaLlegada = this.formatearTiempo();
+            this.horaLlegada = this.obtenerHoraActual();
         }
     }
 
+    // Función para formatear el tiempo en horas: minutos: segundos
+    formatearTiempo() {
+        return this.obtenerHoraActual();
+    }
+
+    // To String para mostrar el estado completo del participante
     toString() {
         return `${this.nombre} - Cédula: ${this.cedula} - Edad: ${this.edad} - Municipio: ${this.municipio} - ` +
                `Posición: ${this.posicion.toFixed(2)} km - Disciplina: ${this.disciplina} - Tiempo Total: ${this.formatearTiempo()} - ` +
@@ -84,24 +110,24 @@ class Participante {
                `Ciclismo: ${this.formatearTiempoCiclismo()} - ${this.descalificado ? "Descalificado" : "En Competencia"} - Hora de llegada: ${this.horaLlegada || "N/A"}`;
     }
 
+    // Funciones para formatear los tiempos de cada disciplina
     formatearTiempoCaminata() {
-        const horas = Math.floor(this.tiempoCaminata / 3600);
-        const minutos = Math.floor((this.tiempoCaminata % 3600) / 60);
-        const segundos = Math.floor(this.tiempoCaminata % 60);
-        return `${String(horas).padStart(2, '0')}:${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
+        return this.formatearTiempoDeDisciplina(this.tiempoCaminata);
     }
 
     formatearTiempoNatacion() {
-        const horas = Math.floor(this.tiempoNatacion / 3600);
-        const minutos = Math.floor((this.tiempoNatacion % 3600) / 60);
-        const segundos = Math.floor(this.tiempoNatacion % 60);
-        return `${String(horas).padStart(2, '0')}:${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
+        return this.formatearTiempoDeDisciplina(this.tiempoNatacion);
     }
 
     formatearTiempoCiclismo() {
-        const horas = Math.floor(this.tiempoCiclismo / 3600);
-        const minutos = Math.floor((this.tiempoCiclismo % 3600) / 60);
-        const segundos = Math.floor(this.tiempoCiclismo % 60);
+        return this.formatearTiempoDeDisciplina(this.tiempoCiclismo);
+    }
+
+    // Función general para formatear el tiempo en formato "hh:mm:ss"
+    formatearTiempoDeDisciplina(tiempo) {
+        const horas = Math.floor(tiempo / 3600);
+        const minutos = Math.floor((tiempo % 3600) / 60);
+        const segundos = Math.floor(tiempo % 60);
         return `${String(horas).padStart(2, '0')}:${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
     }
 }
@@ -189,21 +215,21 @@ document.addEventListener('DOMContentLoaded', function () {
     // Mostrar los resultados en la tabla
     function mostrarResultados() {
         const resultadosBody = document.getElementById("tabla-competidores").getElementsByTagName("tbody")[0];
-    
+
         // Limpiar la tabla antes de agregar nuevos resultados
         resultadosBody.innerHTML = "";
-    
+
         // Iterar sobre los participantes ordenados por su posición
         participantes.forEach((participante, index) => {
             const tr = document.createElement("tr");
-    
-            tr.innerHTML = ` 
-                <td>${index + 1}</td> <!-- Mostrar el puesto -->
+
+            tr.innerHTML = `
+                <td>${index + 1}</td>
                 <td>${participante.cedula}</td>
                 <td>${participante.nombre}</td>
                 <td>${participante.edad}</td>
                 <td>${participante.municipio}</td>
-                <td>${participante.posicion.toFixed(2)}</td> <!-- Mostrar posición actual -->
+                <td>${participante.posicion.toFixed(2)}</td>
                 <td>${participante.disciplina}</td>
                 <td>${participante.formatearTiempo()}</td> <!-- Tiempo total -->
                 <td>${participante.formatearTiempoCaminata()}</td> <!-- Tiempo Caminata -->
@@ -212,18 +238,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 <td>${participante.descalificado ? "Descalificado" : "En Competencia"}</td>
                 <td>${participante.horaLlegada ? participante.horaLlegada : "00:00:00"}</td>
             `;
-    
-            // Agregar la fila a la tabla
+
             resultadosBody.appendChild(tr);
         });
     }
-
-    // Mostrar las posiciones finales cuando termine la simulación
-    function mostrarPosicionesFinales() {
-        participantes.sort((a, b) => b.posicion - a.posicion); // Ordenar por posición
-        console.log("\nPosiciones finales:");
-        participantes.forEach((participante, index) => {
-            console.log(`${index + 1}. ${participante.toString()}`); // Mostrar todos los resultados
-        });
-    }
 });
+
